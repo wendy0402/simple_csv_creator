@@ -1,6 +1,6 @@
-describe CsvCreator::Column do
+describe SimpleCsvCreator::Column do
   let(:column_name) { :name }
-  let(:csv_column) { CsvCreator::Column.new(column_name) }
+  let(:csv_column) { SimpleCsvCreator::Column.new(column_name) }
 
   describe '#human_name' do
     context 'column_name symbol' do
@@ -17,7 +17,7 @@ describe CsvCreator::Column do
     let(:resource_struct) { Struct.new(:name) }
     let(:resource) { resource_struct.new(name) }
     context 'block given' do
-      let(:csv_column) { CsvCreator::Column.new(column_name){ |r| r.name + '2'} }
+      let(:csv_column) { SimpleCsvCreator::Column.new(column_name){ |r| r.name + '2'} }
       it { expect(csv_column.value(resource)).to eq(name + '2') }
     end
 

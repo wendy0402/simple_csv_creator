@@ -1,4 +1,4 @@
-module CsvCreator
+module SimpleCsvCreator
   class Column
     attr_reader :column_name, :block
     def initialize(column_name, &block)

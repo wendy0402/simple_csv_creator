@@ -1,11 +1,11 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'csv_creator/version'
+require 'simple_csv_creator/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "csv_creator"
-  spec.version       = CsvCreator::VERSION
+  spec.name          = "simple_csv_creator"
+  spec.version       = SimpleCsvCreator::VERSION
   spec.authors       = ["wendy0402"]
   spec.email         = ["wendykurniawan92@gmail.com"]
 

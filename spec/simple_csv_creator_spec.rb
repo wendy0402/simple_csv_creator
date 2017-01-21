@@ -1,4 +1,4 @@
-describe CsvCreator do
+describe SimpleCsvCreator do
   let(:resource_class) do
     Class.new do
       attr_reader :name, :email, :age, :join_at
@@ -17,7 +17,7 @@ describe CsvCreator do
 
   describe '.schema' do
     let(:csv_creator) {
-      CsvCreator.schema do
+      SimpleCsvCreator.schema do
         column :email
         column :name
       end
@@ -28,7 +28,7 @@ describe CsvCreator do
 
     context 'any block' do
       let(:csv_creator) {
-        CsvCreator.schema do
+        SimpleCsvCreator.schema do
           column :email
           column(:name) { |resource| resource.name + '2' }
         end

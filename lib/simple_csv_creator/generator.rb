@@ -1,4 +1,4 @@
-module CsvCreator
+module SimpleCsvCreator
   class Generator
     attr_reader :columns
 
@@ -7,7 +7,7 @@ module CsvCreator
     end
 
     def column(column_name, &block)
-      column = ::CsvCreator::Column.new(column_name, &block)
+      column = ::SimpleCsvCreator::Column.new(column_name, &block)
       @columns.push(column)
     end
 

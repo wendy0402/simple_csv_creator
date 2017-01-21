@@ -1,4 +1,4 @@
-describe CsvCreator::Generator do
+describe SimpleCsvCreator::Generator do
   let(:resource_class) do
     Class.new do
       attr_reader :name, :email, :age, :join_at

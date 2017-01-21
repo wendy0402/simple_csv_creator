@@ -1,13 +1,13 @@
-# CsvCreator
+# SimpleCsvCreator
 
-CsvCreator has DSL to build the csv. It's inspired by activeadmin csv
+SimpleCsvCreator has DSL to build the csv. It's inspired by activeadmin csv
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'csv_creator'
+gem 'simple_csv_creator'
 ```
 
 And then execute:
@@ -20,7 +20,7 @@ Or install it yourself as:
 
 ## Usage
 
-CsvCreator has DSL to build the csv
+SimpleCsvCreator has DSL to build the csv
 it's inspired by activeadmin csv
 example:
 
@@ -36,12 +36,12 @@ end
 
 user1 = User.new('test', 20, 'female')
 user2 = User.new('mobile', 13, 'male')
-csv_creator = CsvCreator.schema do
+csv_creator = SimpleCsvCreator.schema do
   column(:name) # if without block then it will run the name given(user.name), header name will be titleize of name
   column(:age) { |r| r.age + ' years' } # if with block will run the block
   column('User Gender') { |r| r.gender } # if want to use custom title need to give the block
 end
-result = CsvCreator.simple_generate([user1, user2])
+result = SimpleCsvCreator.simple_generate([user1, user2])
 csv_parse = CSV.parse(result)
 csv_parse:
 [
@@ -62,7 +62,7 @@ generator = Proc.new do |&block|
     block.call(resource)
   end
 end
-result = CsvCreator.generate_using(generator)
+result = SimpleCsvCreator.generate_using(generator)
 end
 ```
 
