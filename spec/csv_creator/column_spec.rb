@@ -12,17 +12,17 @@ describe CsvCreator::Column do
     end
   end
 
-  describe '#exec_column' do
+  describe '#value' do
     let(:name) { 'test' }
     let(:resource_struct) { Struct.new(:name) }
     let(:resource) { resource_struct.new(name) }
     context 'block given' do
       let(:csv_column) { CsvCreator::Column.new(column_name){ |r| r.name + '2'} }
-      it { expect(csv_column.exec_column(resource)).to eq(name + '2') }
+      it { expect(csv_column.value(resource)).to eq(name + '2') }
     end
 
     context 'block not given' do
-      it { expect(csv_column.exec_column(resource)).to eq(name) }
+      it { expect(csv_column.value(resource)).to eq(name) }
     end
   end
 end

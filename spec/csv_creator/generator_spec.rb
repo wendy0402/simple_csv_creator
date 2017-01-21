@@ -1,19 +1,20 @@
-describe CsvCreator do
+describe CsvCreator::Generator do
   let(:resource_class) do
     Class.new do
-      attr_reader :name, :email, :age
+      attr_reader :name, :email, :age, :join_at
       def initialize(params = {})
         @name = params[:name]
         @age = params[:age]
         @email = params[:email]
+        @join_at = params[:join_at]
       end
     end
   end
 
-  let(:resource1) { resource_class.new(name: 'turbo', email: 'test@example.com', age: 20) }
-  let(:resource2) { resource_class.new(name: 'pato', email: 'pato@example.com', age: 10) }
+  let(:resource1) { resource_class.new(name: 'jack', email: 'jack@example.com', age: 20, join_at: Time.now) }
+  let(:resource2) { resource_class.new(name: 'daniel', email: 'daniel@example.com', age: 10, join_at: Time.now - 3600) }
   let(:resources) { [resource1, resource2] }
-  let(:csv_creator) { CsvCreator::Base.new(resources) }
+  let(:csv_creator) { described_class.new }
 
   describe '#column' do
     context 'put new column without human_name' do
@@ -44,20 +45,39 @@ describe CsvCreator do
       end
 
       it { expect(csv_creator.columns[0].column_name).to eq('Emailsss') }
-      it { expect(csv_creator.columns[0].block).to be_present }
+      it { expect(csv_creator.columns[0].block).to_not be_nil }
     end
   end
 
-  describe '#generate' do
+  describe '#generate_using' do
     before do
       csv_creator.column(:email)
       csv_creator.column(:age)
     end
-    let(:result) { csv_creator.generate }
+
+    it 'can use block' do
+      generator = Proc.new do |&block|
+        resources.each do |resource|
+          block.call(resource)
+        end
+      end
+
+      result = csv_creator.generate_using(generator)
+
+      expect(CSV.parse(result).to_a).to eq([["Email", "Age"], [resource1.email, resource1.age.to_s], [resource2.email, resource2.age.to_s]])
+    end
+  end
+
+  describe '#simple_generate' do
+    before do
+      csv_creator.column(:email)
+      csv_creator.column(:age)
+    end
+    let(:result) { csv_creator.simple_generate(resources) }
     let(:csv_result) { CSV.parse(result) }
 
     context 'columns present' do
-      it 'generate the csv' do
+      it 'simple_generate the csv' do
         expect(csv_result.to_a).to eq([["Email", "Age"], [resource1.email, resource1.age.to_s], [resource2.email, resource2.age.to_s]])
       end
     end

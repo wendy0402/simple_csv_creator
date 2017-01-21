@@ -1,8 +1,6 @@
 # CsvCreator
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/csv_creator`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+CsvCreator has DSL to build the csv. It's inspired by activeadmin csv
 
 ## Installation
 
@@ -22,7 +20,51 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+CsvCreator has DSL to build the csv
+it's inspired by activeadmin csv
+example:
+
+```ruby
+class User
+  attr_reader :name, :age, :gender
+  def initialize(name, age, gender)
+    @name = name
+    @age = age
+    @gender = gender
+  end
+end
+
+user1 = User.new('test', 20, 'female')
+user2 = User.new('mobile', 13, 'male')
+csv_creator = CsvCreator.schema do
+  column(:name) # if without block then it will run the name given(user.name), header name will be titleize of name
+  column(:age) { |r| r.age + ' years' } # if with block will run the block
+  column('User Gender') { |r| r.gender } # if want to use custom title need to give the block
+end
+result = CsvCreator.simple_generate([user1, user2])
+csv_parse = CSV.parse(result)
+csv_parse:
+[
+  ['Name', 'Age', 'User Gender'],
+  ['test', '20 years', 'female'],
+  ['mobile', '13 years', 'male']
+]
+```
+
+Sometimes you want to do lazy fetch e.g: `find_each` method in ActiveRecord.
+If you use simple_generate you won't be able to use this kind of method because simple_generate
+need the array with all of its elements. To handle it you can use `generate_using` method
+
+e.g:
+```ruby
+generator = Proc.new do |&block|
+  resources.each do |resource|
+    block.call(resource)
+  end
+end
+result = CsvCreator.generate_using(generator)
+end
+```
 
 ## Development
 
@@ -38,4 +80,3 @@ Bug reports and pull requests are welcome on GitHub at https://github.com/[USERN
 ## License
 
 The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
-
